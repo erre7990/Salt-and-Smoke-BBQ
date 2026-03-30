@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salt & Smoke — Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1410;
+    --parchment: #f5ede0;
+    --smoke:     #2c2420;
+    --ember:     #c8611a;
+    --gold:      #d4a043;
+    --ash:       #8a7a6e;
+    --cream:     #fdf6ec;
+    --rust:      #8b3a1a;
+    --highlight: #e8925a;
+    --tag-star:  #2d5a1b;
+    --tag-star-bg: #e8f5e0;
+    --tag-anchor-bg: #fff3e0;
+    --tag-anchor: #8b4513;
+    --tag-decoy-bg: #fce4d6;
+    --tag-decoy:  #7b1f1f;
+    --analysis:  #1a3a5c;
+    --analysis-bg: #e8f0f8;
+  }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background-color: var(–ink);
+color: var(–parchment);
+font-family: ‘Libre Baskerville’, serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ─────────────────────────── */
+body::before {
+content: ‘’;
+position: fixed; inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.035’/%3E%3C/svg%3E”);
+pointer-events: none; z-index: 9999; opacity: 0.4;
+}
+
+/* ── COVER ─────────────────────────────────────────── */
+.cover {
+min-height: 100vh;
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+position: relative;
+background: radial-gradient(ellipse at 50% 60%, #3d2010 0%, #1a1410 55%, #0d0b08 100%);
+padding: 60px 40px;
+overflow: hidden;
+}
+
+.cover::before {
+content: ‘’;
+position: absolute; bottom: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold), var(–ember), var(–gold), transparent);
+}
+
+/* Smoke wisps */
+.smoke-bg {
+position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.wisp {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+opacity: 0.06;
+animation: drift 18s ease-in-out infinite alternate;
+}
+.wisp:nth-child(1) { width: 500px; height: 500px; background: var(–ember); top: -100px; left: -100px; animation-delay: 0s; }
+.wisp:nth-child(2) { width: 400px; height: 600px; background: var(–gold); top: 20%; right: -150px; animation-delay: -6s; }
+.wisp:nth-child(3) { width: 600px; height: 300px; background: var(–rust); bottom: -50px; left: 20%; animation-delay: -12s; }
+
+@keyframes drift {
+from { transform: translate(0, 0) scale(1); }
+to   { transform: translate(30px, -40px) scale(1.1); }
+}
+
+.brand-lockup {
+text-align: center;
+position: relative; z-index: 2;
+}
+
+.brand-rule {
+display: flex; align-items: center; gap: 16px;
+margin-bottom: 12px;
+opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s;
+}
+.brand-rule::before, .brand-rule::after {
+content: ‘’;
+flex: 1; height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold));
+}
+.brand-rule::after {
+background: linear-gradient(90deg, var(–gold), transparent);
+}
+.brand-rule span {
+color: var(–gold);
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+font-weight: 600;
+}
+
+.brand-name {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(64px, 10vw, 120px);
+font-weight: 900;
+line-height: 0.9;
+color: var(–parchment);
+letter-spacing: -1px;
+opacity: 0; animation: fadeUp 1s ease forwards 0.4s;
+}
+.brand-name .amp {
+color: var(–ember);
+font-style: italic;
+display: inline-block;
+transform: rotate(-3deg);
+font-weight: 700;
+}
+
+.brand-tagline {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: clamp(15px, 2vw, 20px);
+color: var(–ash);
+letter-spacing: 1px;
+margin-top: 16px;
+opacity: 0; animation: fadeUp 1s ease forwards 0.6s;
+}
+
+.brand-address {
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+color: var(–gold);
+margin-top: 20px;
+opacity: 0; animation: fadeUp 1s ease forwards 0.8s;
+}
+
+.cover-details {
+display: flex; gap: 40px; margin-top: 40px;
+opacity: 0; animation: fadeUp 1s ease forwards 1s;
+}
+.cover-detail {
+text-align: center;
+border: 1px solid rgba(212,160,67,0.25);
+padding: 12px 24px;
+border-radius: 2px;
+}
+.cover-detail .label {
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+color: var(–ash); margin-bottom: 4px;
+}
+.cover-detail .value {
+font-family: ‘Playfair Display’, serif;
+font-size: 13px; color: var(–gold);
+}
+
+.scroll-hint {
+position: absolute; bottom: 30px;
+font-family: ‘Raleway’, sans-serif;
+font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+color: var(–ash);
+display: flex; flex-direction: column; align-items: center; gap: 8px;
+opacity: 0; animation: fadeUp 1s ease forwards 1.4s;
+}
+.scroll-hint::after {
+content: ‘’;
+width: 1px; height: 30px;
+background: linear-gradient(180deg, var(–gold), transparent);
+animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ── MENU BODY ─────────────────────────────────────── */
+.menu-body {
+max-width: 1100px;
+margin: 0 auto;
+padding: 0 32px 80px;
+}
+
+/* ── SECTION ───────────────────────────────────────── */
+.section {
+margin-top: 80px;
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+
+.section-header {
+display: flex; align-items: center; gap: 20px;
+margin-bottom: 32px;
+padding-bottom: 16px;
+border-bottom: 1px solid rgba(212,160,67,0.2);
+}
+.section-icon {
+width: 44px; height: 44px;
+background: linear-gradient(135deg, var(–ember), var(–rust));
+border-radius: 4px;
+display: flex; align-items: center; justify-content: center;
+font-size: 20px; flex-shrink: 0;
+box-shadow: 0 4px 16px rgba(200,97,26,0.35);
+}
+.section-meta { flex: 1; }
+.section-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 28px; font-weight: 700;
+color: #ffffff;
+line-height: 1;
+}
+.section-subtitle {
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+color: #c8a96e; margin-top: 4px;
+}
+
+/* ── ANALYSIS CALLOUT ──────────────────────────────── */
+.analysis-bar {
+background: linear-gradient(135deg, #0d1e2e 0%, #112233 100%);
+border-left: 3px solid var(–gold);
+border-radius: 0 4px 4px 0;
+padding: 16px 20px;
+margin-bottom: 28px;
+position: relative;
+overflow: hidden;
+}
+.analysis-bar::before {
+content: ‘▲ MENU ANALYSIS’;
+position: absolute; top: 10px; right: 14px;
+font-family: ‘Raleway’, sans-serif;
+font-size: 8px; letter-spacing: 2px;
+color: rgba(212,160,67,0.4);
+}
+.analysis-bar p {
+font-family: ‘Raleway’, sans-serif;
+font-size: 12px; line-height: 1.6;
+color: #a8c4d8;
+}
+.analysis-bar strong { color: var(–gold); font-weight: 600; }
+
+/* ── ITEM GRID ─────────────────────────────────────── */
+.items-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+gap: 2px;
+}
+.items-grid.full-width { grid-template-columns: 1fr; }
+.items-grid.three-col { grid-template-columns: repeat(3, 1fr); }
+
+/* ── MENU ITEM ─────────────────────────────────────── */
+.item {
+padding: 18px 20px;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+position: relative;
+transition: background 0.2s ease;
+cursor: default;
+}
+.item:hover { background: rgba(255,255,255,0.025); }
+
+.item-top {
+display: flex; align-items: flex-start;
+justify-content: space-between; gap: 12px;
+}
+.item-left { flex: 1; }
+
+.item-name {
+font-family: ‘Playfair Display’, serif;
+font-size: 16px; font-weight: 600;
+color: var(–parchment);
+line-height: 1.2;
+display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+
+.item-desc {
+font-family: ‘Libre Baskerville’, serif;
+font-size: 12px; color: var(–ash);
+margin-top: 5px; line-height: 1.55;
+font-style: italic;
+}
+
+.item-price {
+font-family: ‘Playfair Display’, serif;
+font-size: 18px; font-weight: 700;
+color: var(–gold);
+white-space: nowrap;
+line-height: 1.2;
+}
+.item-price .cents {
+font-size: 12px; vertical-align: super; color: var(–ember);
+}
+
+/* ── TAGS ──────────────────────────────────────────── */
+.tag {
+display: inline-flex; align-items: center; gap: 3px;
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 0.8px; text-transform: uppercase;
+font-weight: 700;
+padding: 2px 7px; border-radius: 2px;
+line-height: 1.4;
+}
+.tag-star    { background: var(–tag-star-bg); color: var(–tag-star); }
+.tag-anchor  { background: var(–tag-anchor-bg); color: var(–tag-anchor); }
+.tag-decoy   { background: var(–tag-decoy-bg); color: var(–tag-decoy); }
+.tag-puzzle  { background: #e8f0ff; color: #2a3a7c; }
+.tag-popular { background: #2d1a00; color: var(–ember); border: 1px solid rgba(200,97,26,0.3); }
+.tag-new     { background: rgba(212,160,67,0.15); color: var(–gold); border: 1px solid rgba(212,160,67,0.3); }
+.tag-shore   { background: #0d1e2e; color: #5b9fd8; border: 1px solid rgba(91,159,216,0.3); }
+
+/* ── FEATURED ITEM ─────────────────────────────────── */
+.item.featured {
+background: linear-gradient(135deg, rgba(200,97,26,0.08), rgba(200,97,26,0.03));
+border-left: 3px solid var(–ember);
+padding-left: 17px;
+}
+.item.featured .item-name { color: #f0d9bc; }
+
+/* ── ANCHOR ITEM (price anchoring decoy) ───────────── */
+.item.anchor {
+border-left: 3px solid var(–gold);
+padding-left: 17px;
+}
+
+/* ── PSYCHOLOGY NOTE (hover tooltip) ──────────────── */
+.psych-note {
+display: none;
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; line-height: 1.5;
+color: #a8c4d8;
+margin-top: 8px;
+padding: 8px 12px;
+background: rgba(13,30,46,0.85);
+border-left: 2px solid var(–gold);
+border-radius: 0 3px 3px 0;
+}
+.item:hover .psych-note { display: block; }
+
+/* ── DIVIDER ───────────────────────────────────────── */
+.ornament-divider {
+display: flex; align-items: center; gap: 16px;
+margin: 60px 0 0;
+opacity: 0.4;
+}
+.ornament-divider::before, .ornament-divider::after {
+content: ‘’; flex: 1; height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold));
+}
+.ornament-divider::after { background: linear-gradient(90deg, var(–gold), transparent); }
+.ornament-divider span { color: var(–gold); font-size: 14px; }
+
+/* ── RETAIL SHELF ──────────────────────────────────── */
+.retail-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+gap: 16px;
+}
+.retail-card {
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(212,160,67,0.15);
+border-radius: 4px;
+padding: 20px 16px;
+text-align: center;
+transition: border-color 0.2s, transform 0.2s;
+}
+.retail-card:hover { border-color: rgba(212,160,67,0.4); transform: translateY(-2px); }
+.retail-card .r-icon { font-size: 28px; margin-bottom: 10px; }
+.retail-card .r-name {
+font-family: ‘Playfair Display’, serif;
+font-size: 14px; color: var(–parchment);
+margin-bottom: 4px;
+}
+.retail-card .r-size {
+font-family: ‘Raleway’, sans-serif;
+font-size: 10px; letter-spacing: 1px; color: var(–ash);
+margin-bottom: 10px;
+}
+.retail-card .r-price {
+font-family: ‘Playfair Display’, serif;
+font-size: 22px; color: var(–gold); font-weight: 700;
+}
+.retail-card .r-margin {
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; color: var(–ember);
+margin-top: 4px; letter-spacing: 1px;
+}
+
+/* ── ANALYSIS PANEL ────────────────────────────────── */
+.analysis-panel {
+margin-top: 80px;
+background: linear-gradient(135deg, #0a1520 0%, #0d1e2e 100%);
+border: 1px solid rgba(212,160,67,0.15);
+border-radius: 6px;
+padding: 40px;
+opacity: 0; transform: translateY(24px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.analysis-panel.visible { opacity: 1; transform: translateY(0); }
+
+.analysis-panel-header {
+display: flex; align-items: center; gap: 14px;
+margin-bottom: 32px;
+padding-bottom: 20px;
+border-bottom: 1px solid rgba(212,160,67,0.15);
+}
+.analysis-badge {
+background: var(–gold);
+color: var(–ink);
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+font-weight: 700;
+padding: 5px 10px; border-radius: 2px;
+white-space: nowrap;
+}
+.analysis-panel-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 22px; color: var(–parchment);
+}
+
+.analysis-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 24px;
+}
+.analysis-card {
+background: rgba(255,255,255,0.025);
+border-radius: 4px;
+padding: 24px;
+border-top: 2px solid var(–gold);
+}
+.analysis-card.highlight { border-top-color: var(–ember); }
+.analysis-card.info { border-top-color: #5b9fd8; }
+
+.ac-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 16px; font-weight: 700;
+color: var(–parchment);
+margin-bottom: 10px;
+}
+.ac-source {
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+color: var(–ash); margin-bottom: 10px;
+}
+.ac-body {
+font-family: ‘Raleway’, sans-serif;
+font-size: 12px; line-height: 1.7;
+color: #8ba0b0;
+}
+.ac-body strong { color: var(–gold); }
+.ac-body em { color: var(–highlight); font-style: normal; }
+
+/* ── MATRIX TABLE ──────────────────────────────────── */
+.matrix-table {
+width: 100%; border-collapse: collapse;
+margin-top: 16px;
+}
+.matrix-table th {
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+color: var(–ash); padding: 8px 12px;
+text-align: left;
+border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.matrix-table td {
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; color: #8ba0b0;
+padding: 9px 12px;
+border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.matrix-table tr:hover td { color: var(–parchment); }
+.matrix-table td:first-child { color: var(–parchment); font-weight: 600; }
+.matrix-table td.green  { color: #66bb6a; }
+.matrix-table td.amber  { color: var(–gold); }
+.matrix-table td.blue   { color: #5b9fd8; }
+.matrix-table td.red    { color: #ef5350; }
+
+/* ── FOOTER ────────────────────────────────────────── */
+.menu-footer {
+margin-top: 80px;
+padding: 40px;
+background: rgba(0,0,0,0.3);
+border-top: 1px solid rgba(212,160,67,0.15);
+text-align: center;
+}
+.footer-brand {
+font-family: ‘Playfair Display’, serif;
+font-size: 24px; color: var(–gold);
+margin-bottom: 8px;
+}
+.footer-tagline {
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+color: var(–ash);
+margin-bottom: 20px;
+}
+.footer-info {
+display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; color: var(–ash);
+}
+.footer-info span { display: flex; align-items: center; gap: 6px; }
+
+/* ── UTILITY ───────────────────────────────────────── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.dots { letter-spacing: 2px; flex: 1;
+border-bottom: 1px dotted rgba(255,255,255,0.1);
+margin: 0 8px; position: relative; top: -3px; }
+
+/* Shore Club banner */
+.loyalty-banner {
+background: linear-gradient(135deg, #1a2d1a, #0f1f0f);
+border: 1px solid rgba(100,180,100,0.25);
+border-radius: 4px;
+padding: 20px 28px;
+display: flex; align-items: center; gap: 20px;
+margin-top: 60px;
+opacity: 0; transform: translateY(20px);
+transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+}
+.loyalty-banner.visible { opacity: 1; transform: translateY(0); }
+.loyalty-icon { font-size: 32px; flex-shrink: 0; }
+.loyalty-text .l-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 18px; color: #a8d8a8; margin-bottom: 4px;
+}
+.loyalty-text .l-sub {
+font-family: ‘Raleway’, sans-serif;
+font-size: 11px; color: #6a9a6a; letter-spacing: 1px;
+}
+.loyalty-reward {
+margin-left: auto;
+text-align: center;
+background: rgba(100,180,100,0.1);
+border: 1px solid rgba(100,180,100,0.2);
+border-radius: 3px;
+padding: 10px 20px;
+}
+.loyalty-reward .pts {
+font-family: ‘Playfair Display’, serif;
+font-size: 22px; color: #a8d8a8; display: block;
+}
+.loyalty-reward .pts-label {
+font-family: ‘Raleway’, sans-serif;
+font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #6a9a6a;
+}
+
+@media (max-width: 600px) {
+.items-grid { grid-template-columns: 1fr; }
+.items-grid.three-col { grid-template-columns: 1fr 1fr; }
+.cover-details { flex-direction: column; align-items: center; }
+.menu-body { padding: 0 16px 60px; }
+.analysis-grid { grid-template-columns: 1fr; }
+.analysis-panel { padding: 24px; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════ -->
+
+<section class="cover">
+  <div class="smoke-bg">
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+    <div class="wisp"></div>
+  </div>
+
+  <div class="brand-lockup">
+    <div class="brand-rule">
+      <span>Est. 2026 &nbsp;·&nbsp; Millville, Delaware</span>
+    </div>
+
+```
+<div class="brand-name">
+  Salt <span class="amp">&</span> Smoke
+</div>
+
+<div class="brand-tagline">Slow smoked on the Delaware shore</div>
+<div class="brand-address">35308 Atlantic Avenue &nbsp;·&nbsp; Millville, DE 19967</div>
+
+<div class="cover-details">
+  <div class="cover-detail">
+    <div class="label">Hours</div>
+    <div class="value">7am – 9pm</div>
+  </div>
+  <div class="cover-detail">
+    <div class="label">G&amp;G Window</div>
+    <div class="value">7am – 10am</div>
+  </div>
+  <div class="cover-detail">
+    <div class="label">Outdoor Seating</div>
+    <div class="value">May – Sep</div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="scroll-hint">Menu below</div>
+</section>
+
+<!-- ══ MENU BODY ═══════════════════════════════════════════ -->
+
+<div class="menu-body">
+
+  <!-- ── MORNING G&G ───────────────────────────────────── -->
+
+  <div class="section" id="s-gg">
+    <div class="section-header">
+      <div class="section-icon">🌅</div>
+      <div class="section-meta">
+        <div class="section-title">Morning Grab &amp; Go</div>
+        <div class="section-subtitle">7:00 am – 10:00 am &nbsp;·&nbsp; Route 26 Eastbound Window</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Menu Psychology:</strong> The G&G (grab-and-go) window captures an uncontested daypart — a distinct meal-time service window — no BBQ competitor in the corridor serves smoked burritos at 7am. <strong>Framing effect (Tversky & Kahneman, 1981):</strong> the first item a guest reads sets the price anchor for the meal. Opening with a $9.49 flat price across all burritos removes decision friction — guests choose the filling, not the price. <strong>Flat pricing psychology (Ariely, 2009):</strong> uniform pricing reduces the cognitive load of comparison and speeds up the transaction, which matters at a 7am grab-and-go window.</p>
+</div>
+
+<div class="items-grid">
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Shore Brisket Burrito
+          <span class="tag tag-star">⭐ Star</span>
+          <span class="tag tag-popular">🔥 Popular</span>
+        </div>
+        <div class="item-desc">Overnight-smoked USDA Choice (U.S. Dept. of Agriculture premium beef grade) brisket, Eastern Shore slaw, pickled jalapeños, house BBQ sauce. Pre-assembled daily 6:30am.</div>
+        <div class="psych-note">★ Star item: high popularity + high margin (28% food cost). Feature first on board. Anchor for all other grab-and-go items.</div>
+      </div>
+      <div class="item-price">$9<span class="cents">.49</span></div>
+    </div>
+  </div>
+
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Pulled Pork Sunrise Burrito
+          <span class="tag tag-star">⭐ Star</span>
+        </div>
+        <div class="item-desc">Slow-smoked pork shoulder, Eastern Shore slaw, pickled jalapeños, house BBQ sauce. Best-margin protein on the menu.</div>
+        <div class="psych-note">★ Star item: pork shoulder is the most margin-efficient protein at $2.25/lb wholesale. 74% contribution margin.</div>
+      </div>
+      <div class="item-price">$9<span class="cents">.49</span></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Smoked Chicken Burrito
+          <span class="tag tag-star">⭐ Star</span>
+        </div>
+        <div class="item-desc">Smoked half chicken, Eastern Shore slaw, pickled jalapeños, hot sauce. Appeals to lighter-preference guests.</div>
+      </div>
+      <div class="item-price">$9<span class="cents">.49</span></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Delaware Shore Flounder Burrito
+          <span class="tag tag-shore">🌊 Delaware Shore</span>
+        </div>
+        <div class="item-desc">Cold-smoked Atlantic flounder, Eastern Shore slaw, pickled jalapeños, Old Bay rémoulade. Unique to Salt &amp; Smoke.</div>
+        <div class="psych-note">Differentiation item: no competitor offers cold-smoked local flounder at 7am. Creates brand-specific reason to visit.</div>
+      </div>
+      <div class="item-price">$9<span class="cents">.49</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Beverages inline -->
+<div class="items-grid" style="margin-top: 2px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Drip Coffee <span class="tag tag-star">⭐</span></div>
+        <div class="item-desc">House blend. 93% contribution margin (CM).</div>
+      </div>
+      <div class="item-price">$3</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Cold Brew</div>
+        <div class="item-desc">Pre-brewed overnight. Zero additional labor.</div>
+      </div>
+      <div class="item-price">$5</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Double Espresso <span class="tag tag-star">⭐</span></div>
+        <div class="item-desc">Two shots. High margin; fast to pull.</div>
+      </div>
+      <div class="item-price">$4</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Latte <span class="tag tag-star">⭐</span></div>
+        <div class="item-desc">Double espresso, steamed milk. Drives higher transaction size at the window.</div>
+      </div>
+      <div class="item-price">$5<span class="cents">.50</span></div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── STARTERS ──────────────────────────────────────── -->
+
+  <div class="section" id="s-start">
+    <div class="section-header">
+      <div class="section-icon">🔥</div>
+      <div class="section-meta">
+        <div class="section-title">Starters &amp; Shareables</div>
+        <div class="section-subtitle">Wood-fired small plates</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Upsell psychology:</strong> Starters increase average check size by 18–22% when suggested verbally (Cialdini, 2001). <strong>Shareable items are the highest-converting category</strong> — Smokehouse Nachos and Wings both invite the whole table in, and groups who share a starter spend 14% more on mains (Brown, 2019). <strong>Price anchoring:</strong> the Smokehouse Sampler ($46) at the top of the next section makes $13–$14 starters feel like low-commitment, high-value choices — guests self-rationalize: "it's just a small bite."</p>
+</div>
+
+<div class="items-grid">
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Smokehouse Nachos
+          <span class="tag tag-star">⭐ Star</span>
+          <span class="tag tag-popular">🔥 Popular</span>
+        </div>
+        <div class="item-desc">Tortilla chips loaded with pulled pork or brisket, smoked jalapeños, cheddar, house BBQ drizzle, sour cream, pickled red onion.</div>
+        <div class="psych-note">★ Star: nachos are a proven high-volume table-sharing item. Shareable starters increase total table spend — groups who order a shared plate spend 14% more on mains (Brown, 2019). Pulled pork at $2.25/lb keeps food cost around 27%. Highly photogenic for UGC (user-generated content — guest photos and social posts).</div>
+      </div>
+      <div class="item-price">$14</div>
+    </div>
+  </div>
+
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Smoked Wings (10 pc)
+          <span class="tag tag-star">⭐ Star</span>
+          <span class="tag tag-popular">🔥 Popular</span>
+        </div>
+        <div class="item-desc">House rub, choice of sauce. Present stacked for the photo — high social media content value.</div>
+        <div class="psych-note">★ Star + social content item. 10-piece count is a cleaner guest expectation than weight — no one knows what 1 lb looks like on a plate. Guests who photograph and post generate free user-generated content — UGC converts at 10× the rate of branded content (Emplifi, 2025).</div>
+      </div>
+      <div class="item-price">$14</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Pit Beans &amp; Brisket Bits <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Smoked pinto beans, brisket trim, molasses, jalapeño. House recipe.</div>
+      </div>
+      <div class="item-price">$8</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Maryland Blue Crab Dip
+          <span class="tag tag-star">⭐ Star</span>
+          <span class="tag tag-shore">🌊 Shore</span>
+        </div>
+        <div class="item-desc">Chesapeake blue crab, cream cheese, Old Bay, smoked paprika. Served warm with grilled bread.</div>
+        <div class="psych-note">★ Blue crab is the definitive Chesapeake identity ingredient. High perceived value at $13. 29% food cost → $9.23 contribution margin (CM — revenue minus ingredient cost). Server script: "our crab dip is made with Chesapeake blue crab and Old Bay — perfect with a cold beer."</div>
+      </div>
+      <div class="item-price">$13</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── BBQ PLATES ─────────────────────────────────────── -->
+
+  <div class="section" id="s-plates">
+    <div class="section-header">
+      <div class="section-icon">🍖</div>
+      <div class="section-meta">
+        <div class="section-title">BBQ Plates</div>
+        <div class="section-subtitle">Served with two sides of your choice &nbsp;·&nbsp; Smoked 14–16 hours overnight</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Price Anchoring (Thaler, 1980):</strong> The Smokehouse Sampler ($46) should always appear first and largest. Its sole purpose is to make the $24 Brisket Plate look like exceptional value — guests anchor to $46, then "choose" the $24 option feeling like they've been smart. <strong>Decoy Effect (Ariely, 2009):</strong> Full Rack Ribs ($38) makes the Half Rack ($22) irresistible by comparison — same experience, lower spend, higher perceived savings. <strong>Plowhorse management:</strong> Ribs are expected but margin-thin at 35% food cost. Do not feature; let guests self-select.</p>
+</div>
+
+<div class="items-grid">
+  <div class="item anchor" style="grid-column: 1 / -1;">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Smokehouse Sampler
+          <span class="tag tag-anchor">⚓ Price Anchor</span>
+          <span class="tag tag-star">⭐ Star</span>
+        </div>
+        <div class="item-desc">Sliced brisket, pulled pork, 2 baby back ribs, smoked chicken. Feeds 2–3. Four sides. The pitmaster's full spread.</div>
+        <div class="psych-note">⚓ ANCHOR: This item exists to make everything else feel reasonable. At $46, the $24 brisket plate feels like value. Highest dollar contribution margin (CM — revenue minus ingredient cost) on the menu: $37.72. Featured top-left — the "sweet spot" for eye-tracking on menus (Yang, 2012).</div>
+      </div>
+      <div class="item-price">$46</div>
+    </div>
+  </div>
+
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Sliced Brisket Plate
+          <span class="tag tag-star">⭐ Star</span>
+          <span class="tag tag-popular">🔥 Most Ordered</span>
+        </div>
+        <div class="item-desc">12oz USDA Choice (U.S. Dept. of Agriculture premium beef grade) brisket, sliced to order. The signature. Two sides.</div>
+        <div class="psych-note">★ The core identity item. Guests who order brisket are most likely to return and most likely to post on social media. Priority for quality control.</div>
+      </div>
+      <div class="item-price">$24</div>
+    </div>
+  </div>
+
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Pulled Pork Plate
+          <span class="tag tag-star">⭐ Star</span>
+        </div>
+        <div class="item-desc">8oz slow-smoked pork shoulder, pulled fresh. Two sides.</div>
+        <div class="psych-note">★ Best margin protein. Feature in server suggestion: "the pork is what we're known for." 74% contribution margin.</div>
+      </div>
+      <div class="item-price">$18</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Full Rack Baby Back Ribs
+          <span class="tag tag-decoy">🎭 Decoy</span>
+        </div>
+        <div class="item-desc">Full rack, 3-2-1 smoked. Tender to the bone. Two sides.</div>
+        <div class="psych-note">🎭 DECOY: Exists to make the Half Rack ($22) look like a deal. 35% food cost makes this our thinnest margin plate. Do not feature or upsell — let guests self-select when they anchor off the Full Rack price.</div>
+      </div>
+      <div class="item-price">$38</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Half Rack Baby Back Ribs</div>
+        <div class="item-desc">Half rack, same 3-2-1 smoke. One side.</div>
+        <div class="psych-note">The "value" choice anchored against the Full Rack. Most guests who order ribs will land here once they see $38. Same margin profile — same quality.</div>
+      </div>
+      <div class="item-price">$22</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Smoked Half Chicken
+          <span class="tag tag-star">⭐ Star</span>
+        </div>
+        <div class="item-desc">Brined and smoked, crispy skin. 22% food cost — highest margin protein plate. Two sides.</div>
+      </div>
+      <div class="item-price">$18</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">
+          Delaware Shore Flounder
+          <span class="tag tag-puzzle">❓ Puzzle</span>
+          <span class="tag tag-shore">🌊 Shore</span>
+          <span class="tag tag-new">NEW</span>
+        </div>
+        <div class="item-desc">Cold-smoked Atlantic flounder. No BBQ competitor offers this. Two sides.</div>
+        <div class="psych-note">❓ PUZZLE: high margin (30% food cost), uncertain popularity. This is the brand's biggest differentiation bet. Server training key: "the only cold-smoked flounder on the Delaware shore." Promote verbally every table.</div>
+      </div>
+      <div class="item-price">$22</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── SANDWICHES ─────────────────────────────────────── -->
+
+  <div class="section" id="s-sand">
+    <div class="section-header">
+      <div class="section-icon">🥪</div>
+      <div class="section-meta">
+        <div class="section-title">Sandwiches</div>
+        <div class="section-subtitle">Served on brioche · with one side of choice</div>
+      </div>
+    </div>
+
+```
+<div class="items-grid">
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Chopped Brisket Sandwich <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Chopped brisket, house pickle slaw, brioche. Tourist entry-level BBQ price point.</div>
+      </div>
+      <div class="item-price">$16</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Delaware Shore Flounder Po'Boy <span class="tag tag-shore">🌊 Shore</span></div>
+        <div class="item-desc">Cold-smoked flounder, Old Bay rémoulade, lettuce on hoagie.</div>
+      </div>
+      <div class="item-price">$16</div>
+    </div>
+  </div>
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Pulled Pork Sandwich <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">8oz pulled pork, house slaw, pickles, brioche.</div>
+      </div>
+      <div class="item-price">$14</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Smoked Chicken Sandwich <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Smoked thigh, jalapeño slaw, hot sauce mayo. Best margin sandwich.</div>
+      </div>
+      <div class="item-price">$14</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── REGIONAL SIDES ─────────────────────────────────── -->
+
+  <div class="section" id="s-sides">
+    <div class="section-header">
+      <div class="section-icon">🌽</div>
+      <div class="section-meta">
+        <div class="section-title">Delaware Shore Sides</div>
+        <div class="section-subtitle">Regionally inspired &nbsp;·&nbsp; Made daily &nbsp;·&nbsp; All sides available à la carte</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Regional identity (Kotler et al., 2017):</strong> Sides are where most BBQ restaurants default to generic. Salt &amp; Smoke uses sides as a brand-building tool — <strong>Old Bay is the flavor of the Chesapeake/Delaware Shore.</strong> A tourist who gets Old Bay fries in Millville will associate that flavor with this specific restaurant. Generic mac &amp; cheese is forgettable; <strong>Old Bay Mac &amp; Cheese is Instagrammable.</strong> Side upsell increases check size 8–12% per additional side ordered (Brown, 2019).</p>
+</div>
+
+<div class="items-grid three-col">
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Old Bay Fries <span class="tag tag-star">⭐</span> <span class="tag tag-shore">🌊</span></div>
+        <div class="item-desc">Crispy fries, Old Bay seasoning, house aioli. 14% food cost.</div>
+      </div>
+      <div class="item-price">$5</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Old Bay Mac &amp; Cheese <span class="tag tag-star">⭐</span> <span class="tag tag-shore">🌊</span></div>
+        <div class="item-desc">Aged cheddar béchamel, Old Bay finish. Delaware coastal upgrade.</div>
+      </div>
+      <div class="item-price">$5<span class="cents">.50</span></div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Eastern Shore Vinegar Slaw <span class="tag tag-star">⭐</span> <span class="tag tag-shore">🌊</span></div>
+        <div class="item-desc">Apple cider vinegar, celery seed. Delmarva tradition. 13% food cost.</div>
+      </div>
+      <div class="item-price">$4</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Corn Pudding <span class="tag tag-star">⭐</span> <span class="tag tag-shore">🌊</span></div>
+        <div class="item-desc">Delaware/Virginia coastal staple. Baked fresh daily. Guest surprise item.</div>
+      </div>
+      <div class="item-price">$5</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Hush Puppies (6pc) <span class="tag tag-new">NEW</span> <span class="tag tag-shore">🌊</span></div>
+        <div class="item-desc">Deep-fried cornmeal, paired with smoked flounder. Coastal Delaware tradition.</div>
+      </div>
+      <div class="item-price">$4</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Smoked Potato Salad <span class="tag tag-star">⭐</span></div>
+        <div class="item-desc">Cold-smoked Yukon golds. Salt &amp; Smoke signature.</div>
+      </div>
+      <div class="item-price">$4</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Pit Baked Beans <span class="tag tag-star">⭐</span></div>
+        <div class="item-desc">Smoked with brisket trim and molasses. 17% food cost.</div>
+      </div>
+      <div class="item-price">$5</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Collard Greens</div>
+        <div class="item-desc">Slow-cooked with smoked ham hock.</div>
+      </div>
+      <div class="item-price">$5</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── DESSERTS ───────────────────────────────────────── -->
+
+  <div class="section" id="s-dessert">
+    <div class="section-header">
+      <div class="section-icon">🍮</div>
+      <div class="section-meta">
+        <div class="section-title">Desserts</div>
+        <div class="section-subtitle">House-made daily</div>
+      </div>
+    </div>
+    <div class="items-grid three-col">
+      <div class="item featured">
+        <div class="item-top">
+          <div class="item-left">
+            <div class="item-name">Banana Pudding <span class="tag tag-star">⭐ Star</span></div>
+            <div class="item-desc">Classic Southern BBQ. 22% food cost. $5.46 CM.</div>
+          </div>
+          <div class="item-price">$7</div>
+        </div>
+      </div>
+      <div class="item featured">
+        <div class="item-top">
+          <div class="item-left">
+            <div class="item-name">Peach Cobbler <span class="tag tag-star">⭐ Star</span></div>
+            <div class="item-desc">Seasonal fruit. Cast iron baked. 25% food cost.</div>
+          </div>
+          <div class="item-price">$8</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-top">
+          <div class="item-left">
+            <div class="item-name">Pecan Pie (slice) <span class="tag tag-puzzle">❓ Puzzle</span></div>
+            <div class="item-desc">High margin if ordered. Monitor at 90-day review.</div>
+          </div>
+          <div class="item-price">$7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── DRINKS ─────────────────────────────────────────── -->
+
+  <div class="section" id="s-drinks">
+    <div class="section-header">
+      <div class="section-icon">🍺</div>
+      <div class="section-meta">
+        <div class="section-title">Drinks</div>
+        <div class="section-subtitle">Delaware craft draft &nbsp;·&nbsp; Cocktails &nbsp;·&nbsp; Non-alcoholic</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Beverage engineering is the highest-leverage margin tool on the menu (Laube & Shuster, 2012):</strong> cocktails (18% food cost) and sweet tea (4% food cost) are the most profitable items Salt &amp; Smoke serves. <strong>Server suggestion sequence matters:</strong> suggest a specific beer by name ("We have Dogfish Head 60 Minute on draft — great with brisket") rather than asking "can I get you something to drink?" Specific suggestions convert at 2.4× the rate of open questions (Cialdini, 2001). <strong>Delaware craft partnership:</strong> naming local breweries creates a sense of place — tourists value authenticity and local sourcing.</p>
+</div>
+
+<!-- Draft -->
+<div style="font-family: 'Raleway', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ash); margin-bottom: 12px;">Delaware Craft Draft · 4 Taps</div>
+<div class="items-grid">
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Dogfish Head 60 Minute IPA <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Milton, DE · Est. 1995 · Nationally recognized. Flagship pairing for brisket. 21% food cost → 79% CM.</div>
+      </div>
+      <div class="item-price">$8</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Crooked Hammock Light Lager <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Lewes, DE · Session beer. Family-friendly, high-volume. 19% food cost.</div>
+      </div>
+      <div class="item-price">$7</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Big Oyster Hammerhead IPA <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Lewes, DE · Coastal brand. Natural pairing for smoked flounder.</div>
+      </div>
+      <div class="item-price">$8</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Rotating Seasonal <span class="tag tag-new">Rotating</span></div>
+        <div class="item-desc">Delaware Brewers Guild member. Changes seasonally. Supports craft community.</div>
+      </div>
+      <div class="item-price">$7–$8</div>
+    </div>
+  </div>
+</div>
+
+<!-- Cocktails -->
+<div style="font-family: 'Raleway', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ash); margin: 20px 0 12px;">Cocktails</div>
+<div class="items-grid">
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Old Fashioned <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Bulleit bourbon. 18% food cost — highest margin item on the entire menu. Always suggest.</div>
+        <div class="psych-note">★ PRIORITY UPSELL: $10.66 contribution margin (CM — revenue minus ingredient cost) per drink. If every table at full capacity orders one cocktail, that's $1,040 in CM per peak evening.</div>
+      </div>
+      <div class="item-price">$13</div>
+    </div>
+  </div>
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Millville Mule <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Ginger beer, vodka, lime. Served in copper mug — high Instagram value. 18% food cost.</div>
+      </div>
+      <div class="item-price">$12</div>
+    </div>
+  </div>
+  <div class="item featured">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Sweet Tea Whiskey Lemonade <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">House sweet tea, fresh lemonade, Tennessee whiskey. Salt &amp; Smoke signature cocktail.</div>
+      </div>
+      <div class="item-price">$11</div>
+    </div>
+  </div>
+</div>
+
+<!-- Non-alc -->
+<div style="font-family: 'Raleway', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ash); margin: 20px 0 12px;">Non-Alcoholic</div>
+<div class="items-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Sweet Tea (large) <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">House-brewed. 4% food cost. Unlimited refills.</div>
+      </div>
+      <div class="item-price">$3</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Unsweetened Tea (large)</div>
+        <div class="item-desc">House-brewed black tea. Same batch, no sugar.</div>
+      </div>
+      <div class="item-price">$3</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">House Lemonade <span class="tag tag-star">⭐ Star</span></div>
+        <div class="item-desc">Fresh-squeezed or Sysco bulk. 10% food cost.</div>
+      </div>
+      <div class="item-price">$4</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-top">
+      <div class="item-left">
+        <div class="item-name">Soft Drinks</div>
+        <div class="item-desc">Coke products. Expected; low margin.</div>
+      </div>
+      <div class="item-price">$3</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="ornament-divider"><span>✦</span></div>
+
+  <!-- ── RETAIL SHELF ───────────────────────────────────── -->
+
+  <div class="section" id="s-retail">
+    <div class="section-header">
+      <div class="section-icon">🛒</div>
+      <div class="section-meta">
+        <div class="section-title">Take the Shore Home</div>
+        <div class="section-subtitle">Counter display &nbsp;·&nbsp; No active selling required &nbsp;·&nbsp; ~75% blended gross margin</div>
+      </div>
+    </div>
+
+```
+<div class="analysis-bar">
+  <p><strong>Retail as marketing (Fields, 2014):</strong> Every bottle of Salt &amp; Smoke sauce a tourist takes home is a recurring advertisement — they use it at a backyard cookout in Philadelphia, someone asks where they got it, they tell the story. <strong>Year 2 Shopify launch:</strong> in-store buyers become online repeat customers. A $12 bottle purchased in-store becomes a $25 recurring annual order (2 re-purchases at $12 each, post-shipping). 1,475 units in Year 1 at $13.80 blended average price = $20,360 in near-pure-margin revenue — zero additional labor, zero kitchen time.</p>
+</div>
+
+<div class="retail-grid">
+  <div class="retail-card">
+    <div class="r-icon">🫙</div>
+    <div class="r-name">House BBQ Sauce</div>
+    <div class="r-size">12 oz · House recipe</div>
+    <div class="r-price">$12</div>
+    <div class="r-margin">77% margin · 350 units/yr</div>
+  </div>
+  <div class="retail-card">
+    <div class="r-icon">🦀</div>
+    <div class="r-name">Old Bay BBQ Sauce</div>
+    <div class="r-size">12 oz · Delaware Shore</div>
+    <div class="r-price">$13</div>
+    <div class="r-margin">77% margin · 260 units/yr</div>
+  </div>
+  <div class="retail-card">
+    <div class="r-icon">🌶️</div>
+    <div class="r-name">Hot Sauce</div>
+    <div class="r-size">5 oz · Chipotle smoked</div>
+    <div class="r-price">$11</div>
+    <div class="r-margin">80% margin · 430 units/yr</div>
+  </div>
+  <div class="retail-card">
+    <div class="r-icon">🧂</div>
+    <div class="r-name">Signature Smoke Rub</div>
+    <div class="r-size">4 oz · House blend</div>
+    <div class="r-price">$10</div>
+    <div class="r-margin">85% margin · 250 units/yr</div>
+  </div>
+  <div class="retail-card">
+    <div class="r-icon">🧢</div>
+    <div class="r-name">Branded Hat</div>
+    <div class="r-size">Embroidered logo · M/L</div>
+    <div class="r-price">$28</div>
+    <div class="r-margin">68% margin · 120 units/yr</div>
+  </div>
+  <div class="retail-card">
+    <div class="r-icon">👕</div>
+    <div class="r-name">Branded T-Shirt</div>
+    <div class="r-size">Unisex · M/L only Y1</div>
+    <div class="r-price">$32</div>
+    <div class="r-margin">66% margin · 75 units/yr</div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ── LOYALTY BANNER ─────────────────────────────────── -->
+
+  <div class="loyalty-banner" id="loyalty-banner">
+    <div class="loyalty-icon">🌊</div>
+    <div class="loyalty-text">
+      <div class="l-title">Shore Club — Members Only</div>
+      <div class="l-sub">$1 spent = 10 points &nbsp;·&nbsp; 500 points = $5 reward &nbsp;·&nbsp; 1.5× off-peak multiplier &nbsp;·&nbsp; 2× on your birthday</div>
+    </div>
+    <div class="loyalty-reward">
+      <span class="pts">$2,455</span>
+      <span class="pts-label">Avg. Member Lifetime Value</span>
+    </div>
+  </div>
+
+  <!-- ══ MENU ENGINEERING ANALYSIS ══════════════════════════ -->
+
+  <div class="analysis-panel" id="analysis-panel">
+    <div class="analysis-panel-header">
+      <div class="analysis-badge">Academic Analysis</div>
+      <div class="analysis-panel-title">Menu Engineering &amp; Consumer Psychology</div>
+    </div>
+
+```
+<div class="analysis-grid">
+
+  <div class="analysis-card">
+    <div class="ac-title">Menu Engineering Matrix</div>
+    <div class="ac-source">Kasavana &amp; Smith (1982)</div>
+    <div class="ac-body">Items classified by <strong>popularity</strong> (sales mix) and <strong>contribution margin</strong>. The 2×2 matrix drives every pricing, placement, and promotion decision.</div>
+    <table class="matrix-table">
+      <tr><th>Category</th><th>Popularity</th><th>Contribution Margin (CM)</th><th>Strategy</th></tr>
+      <tr><td>⭐ Star</td><td class="green">High</td><td class="green">High</td><td>Feature · Upsell · Protect</td></tr>
+      <tr><td>🐂 Plowhorse</td><td class="green">High</td><td class="amber">Low</td><td>Keep · Cost-manage · Don't feature</td></tr>
+      <tr><td>❓ Puzzle</td><td class="red">Low</td><td class="green">High</td><td>Promote · Verbal suggestion · Reposition</td></tr>
+      <tr><td>🐕 Dog</td><td class="red">Low</td><td class="red">Low</td><td>Remove at 90-day review</td></tr>
+    </table>
+  </div>
+
+  <div class="analysis-card highlight">
+    <div class="ac-title">Price Anchoring &amp; the Decoy Effect</div>
+    <div class="ac-source">Thaler (1980) · Ariely (2009) · Tversky &amp; Kahneman (1981)</div>
+    <div class="ac-body">
+      The <strong>Smokehouse Sampler ($46)</strong> is a strategic anchor — its primary purpose is to make the $24 Brisket Plate appear to be excellent value. Guests anchor to the highest price they see first, then compare everything else relative to it.<br><br>
+      The <strong>Full Rack ($38) vs. Half Rack ($22)</strong> pairing is a textbook decoy: the Full Rack exists to make the Half Rack feel like a bargain. Most guests land on the Half Rack, believing they've made the smart choice — while the restaurant delivers the same margin profile.<br><br>
+      <em>Never list prices with dollar signs in prominent positions</em> — research shows removing the "$" symbol reduces price salience and increases spend (Yang, 2012).
+    </div>
+  </div>
+
+  <div class="analysis-card info">
+    <div class="ac-title">Menu Placement &amp; Eye-Tracking</div>
+    <div class="ac-source">Yang (2012) · Pavesic (2005) · Gallup &amp; Robinson Research</div>
+    <div class="ac-body">
+      Restaurant menus follow predictable <strong>eye-tracking patterns</strong>. The top-right corner gets first attention on a two-panel menu; for single-page menus, the first item and the last item in each section receive disproportionate attention.<br><br>
+      <strong>Implication:</strong> Place the highest-margin Stars (<em>Pulled Pork Plate, Smoked Chicken, Old Fashioned</em>) first and last within each section. Bury Plowhorses (Ribs) in the middle — guests still find them when they want them, without being nudged toward thin-margin items.<br><br>
+      <strong>Section naming matters:</strong> "Delaware Shore Sides" is more memorable — and more justifiable at $4–$5.50 — than "Sides."
+    </div>
+  </div>
+
+  <div class="analysis-card">
+    <div class="ac-title">Server Verbal Suggestion Protocol</div>
+    <div class="ac-source">Cialdini (2001) · Brown (2019)</div>
+    <div class="ac-body">
+      Specific verbal suggestions convert at <strong>2.4× the rate</strong> of open-ended questions. Train every server on these exact scripts:<br><br>
+      ✦ <em>"The brisket is what we're known for — it smokes overnight."</em><br>
+      ✦ <em>"Can I start you with an Old Fashioned? We use Bulleit bourbon."</em><br>
+      ✦ <em>"The pulled pork is the pitmaster's recommendation today."</em><br>
+      ✦ <em>"We have the only cold-smoked flounder on the Delaware shore."</em><br><br>
+      Each of these suggestions targets a <strong>Star or Puzzle item</strong>. Never suggest Plowhorses.
+    </div>
+  </div>
+
+  <div class="analysis-card highlight">
+    <div class="ac-title">Beverage Attachment Rate</div>
+    <div class="ac-source">Laube &amp; Shuster (2012) · NRA (2025)</div>
+    <div class="ac-body">
+      Beverages are the <strong>single highest-leverage margin category</strong> on the Salt &amp; Smoke menu:<br><br>
+      <table class="matrix-table">
+        <tr><th>Item</th><th>Food Cost %</th><th>Contribution Margin (CM)</th></tr>
+        <tr><td>Sweet Tea</td><td class="green">4%</td><td class="green">$2.88</td></tr>
+        <tr><td>Old Fashioned</td><td class="green">18%</td><td class="green">$10.66</td></tr>
+        <tr><td>Dogfish IPA</td><td class="amber">21%</td><td class="amber">$6.35</td></tr>
+        <tr><td>Pulled Pork Plate</td><td class="amber">26%</td><td class="amber">$13.32</td></tr>
+      </table><br>
+      A table of 4 that orders cocktails instead of soft drinks generates an additional <em>~$30 in contribution margin</em> at essentially zero additional cost. Beverage attachment rate — the percentage of guests who order a drink alongside their food — is the single most trainable revenue lever in the restaurant. The most profitable 30 minutes of staff training possible.
+    </div>
+  </div>
+
+  <div class="analysis-card info">
+    <div class="ac-title">Regional Identity as Brand Moat</div>
+    <div class="ac-source">Kotler, Bowen, Makens &amp; Baloglu (2017) · Emplifi (2025)</div>
+    <div class="ac-body">
+      Generic BBQ restaurants compete on price. <strong>Salt &amp; Smoke competes on place.</strong> The "Delaware Shore" identity creates a brand moat that a chain cannot replicate and a future competitor cannot easily copy:<br><br>
+      ✦ <em>Cold-smoked Atlantic flounder</em> — local sourcing, local story<br>
+      ✦ <em>Old Bay seasoning</em> — Chesapeake/Delaware flavor identity<br>
+      ✦ <em>Eastern Shore vinegar slaw</em> — Delmarva regional tradition<br>
+      ✦ <em>Dogfish Head / Big Oyster / Crooked Hammock</em> — Delaware craft identity<br><br>
+      <strong>UGC (user-generated content — guest photos and social posts) multiplier (Emplifi, 2025):</strong> User-generated content converts at 10× the rate of branded content. The flounder po'boy, Millville Mule copper mug, and smoked wing stack are specifically designed to be photographed and shared.
+    </div>
+  </div>
+
+  <div class="analysis-card" style="grid-column: 1 / -1;">
+    <div class="ac-title">90-Day Menu Review Protocol</div>
+    <div class="ac-source">Kasavana &amp; Smith (1982) · Toast POS Analytics</div>
+    <div class="ac-body" style="column-count: 2; column-gap: 32px;">
+      Toast POS (point-of-sale system) automatically tracks sales mix — how often each item is ordered relative to total covers — and contribution margin by item. At Day 90, pull the Menu Engineering report and apply the matrix:<br><br>
+      <strong>Actions by category:</strong><br>
+      ⭐ <em>Stars</em> — Protect. Increase price test by $1–2 if demand is inelastic. Never remove.<br>
+      🐂 <em>Plowhorses</em> — Reduce portion slightly (test first), negotiate protein cost, or raise price $1–2. If still underperforming after 2 quarters, reposition or replace.<br>
+      ❓ <em>Puzzles</em> — Double down on verbal server suggestions. Add a table tent. If still low popularity at Day 180, consider bundling with a Star (e.g., "Brisket &amp; Flounder Flight").<br>
+      🐕 <em>Dogs</em> — Remove from menu at Day 90 review. Exception: if a Dog serves a specific segment (vegetarian option) that drives a companion's Star order, keep it for table-level logic.<br><br>
+      <strong>Watch list items:</strong> Delaware Shore Flounder (plate and po'boy formats) are high-margin Puzzles that require active verbal promotion. Pecan Pie is the only current Dog candidate. Garden Smoke Veggie Burrito (G&G — grab-and-go) — reassess at Day 90; remove if &lt;2 units/day.
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+
+<footer class="menu-footer">
+  <div class="footer-brand">Salt &amp; Smoke</div>
+  <div class="footer-tagline">Slow smoked on the Delaware shore</div>
+  <div class="footer-info">
+    <span>📍 35308 Atlantic Avenue, Millville, DE 19967</span>
+    <span>🕐 7am – 9pm Daily</span>
+    <span>🌿 Outdoor Seating May – Sep</span>
+    <span>🌊 Shore Club Loyalty Program</span>
+  </div>
+  <div style="margin-top: 20px; font-family: 'Raleway', sans-serif; font-size: 10px; color: rgba(138,122,110,0.5); letter-spacing: 1px;">
+    Menu prices subject to change &nbsp;·&nbsp; Consuming raw or undercooked meat may increase your risk of foodborne illness &nbsp;·&nbsp; Ask your server about allergy information
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for scroll-reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.section, .analysis-panel, .loyalty-banner').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
